@@ -1,10 +1,8 @@
 function riverSizes(matrix) {
   let sizes = [];
-  let visited = new Array(matrix[0].length).map(e => Array(...matrix).fill(false));
-  console.log(matrix);
-  console.log(visited);
-  for (let i in matrix) {
-    for (let j in matrix[i]) {
+  let visited = matrix.map(row => row.map(col => false));
+  for (let i = 0; i < matrix.length; i++) {
+    for (let j = 0; j < matrix[i].length; j++) {
       if (!visited[i][j]) {
         traverseNode(i, j, matrix, visited, sizes);  
   }}}    
@@ -14,7 +12,7 @@ function riverSizes(matrix) {
 function traverseNode(i, j, matrix, visited, sizes) {
   currentRiverSize = 0;
   nodesToExplore = [[i, j]];
-  while (nodesToExplore.length) {
+  while (nodesToExplore.length > 0) {
     currentNode = nodesToExplore.pop();
     i = currentNode[0];
     j = currentNode[1];
@@ -26,29 +24,28 @@ function traverseNode(i, j, matrix, visited, sizes) {
       continue;
     }
     currentRiverSize++;
-    unvisitedNeighbors = getUnvisitedNeighbors(i, j, matrix, visited);
-    for (let neighbor in unvisitedNeighbors) {
-      nodesToExplore.append(neighbor);
+    let unvisitedNeighbors = getUnvisitedNeighbors(i, j, matrix, visited);
+    for (let k in unvisitedNeighbors) {
+      nodesToExplore.push(unvisitedNeighbors[k]);
   }}
   if (currentRiverSize > 0) {
-    sizes.append(currentRiverSize);
+    sizes.push(currentRiverSize);
   }
 }
 
 function getUnvisitedNeighbors(i, j, matrix, visited) {
   unvisitedNeighbors = [];
   if (i > 0 && !visited[i - 1][j]) {
-    unvisitedNeighbors.append([i - 1, j]);
+    unvisitedNeighbors.push([i - 1, j]);
   }
-  console.log(visited);
-  if (i < matrix.length && !visited[i + 1][j]) {
-    unvisitedNeighbors.append([i + 1, j]);
+  if (i < matrix.length - 1 && !visited[i + 1][j]) {
+    unvisitedNeighbors.push([i + 1, j]);
   }
   if (j > 0 && !visited[i][j - 1]) {
-    unvisitedNeighbors.append([i, j - 1]);
+    unvisitedNeighbors.push([i, j - 1]);
   }
-  if (j < matrix.length && !visited[i][j + 1]) {
-    unvisitedNeighbors.append([i, j - 1]);
+  if (j < matrix[i].length - 1 && !visited[i][j + 1]) {
+    unvisitedNeighbors.push([i, j + 1]);
   }
   return unvisitedNeighbors;
 }
